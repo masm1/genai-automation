@@ -7,5 +7,11 @@
             <class name="tests.LoginTest"/>
         </classes>
     </test>
-
+    <listeners>
+        <listener class-name="utils.TestListener"/>
+    </listeners>
+    <listeners>
+        <listener class-name="utils.RetryListener"/>
+        <listener class-name="utils.TestListener"/>
+    </listeners>
 </suite>
