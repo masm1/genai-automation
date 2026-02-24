@@ -20,7 +20,7 @@ pipeline {
 
         stage('Archive Reports') {
             steps {
-                archiveArtifacts artifacts: 'test-output/**'
+                archiveArtifacts artifacts: 'target/surefire-reports/**'
             }
         }
     }
