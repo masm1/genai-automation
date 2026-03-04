@@ -3,7 +3,10 @@ package pages;
 import base.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import utils.WaitUtils;
+
+import java.util.List;
 
 public class ProductsPage {
 
@@ -26,7 +29,10 @@ public class ProductsPage {
     }
 
     public boolean isBackpackRemoveButtonDisplayed() {
-        return WaitUtils.waitForElementVisible(backpackRemoveBtn).isDisplayed();
+        List<WebElement> elements = driver.findElements(backpackRemoveBtn);
+
+        return elements.size() > 0 && elements.get(0).isDisplayed();
+        //return WaitUtils.waitForElementVisible(backpackRemoveBtn).isDisplayed();
     }
 
     public void removeBackpackFromCart() {
