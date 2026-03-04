@@ -6,24 +6,27 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
+
         stage('Run Tests in Parallel') {
-                    parallel {
-                        stage('Chrome Tests') {
-                            steps {
-                                sh 'mvn test -Dbrowser=chrome'
-                            }
-                        }
-                        stage('Firefox Tests') {
-                            steps {
-                                sh 'mvn test -Dbrowser=firefox'
-                            }
-                        }
+            parallel {
+                stage('Chrome Tests') {
+                    steps {
+                        sh 'mvn test -Dbrowser=chrome'
                     }
+                }
+                stage('Firefox Tests') {
+                    steps {
+                        sh 'mvn test -Dbrowser=firefox'
+                    }
+                }
+            }
+        }  // ✅ MISSING BRACKET ADDED HERE
 
         stage('Build & Test') {
             steps {
@@ -36,5 +39,6 @@ pipeline {
                 archiveArtifacts artifacts: 'target/surefire-reports/**'
             }
         }
+
     }
 }
