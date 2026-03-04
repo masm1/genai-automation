@@ -1,22 +1,60 @@
 image: maven:3.9.6-eclipse-temurin-17
 
 stages:
+  - build
   - test
   - report
 
-test:
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  SELENIUM_URL: "http://selenium__standalone-chrome:4444/wd/hub"
+
+services:
+  - name: selenium/standalone-chrome
+    alias: selenium__standalone-chrome
+  - name: selenium/standalone-firefox
+    alias: selenium__standalone-firefox
+
+cache:
+  paths:
+    - .m2/repository
+
+# 🔹 Build Stage
+build-job:
+  stage: build
+  script:
+    - mvn clean compile
+
+# 🔹 Parallel Test Template
+.parallel_template: &parallel_test
   stage: test
   script:
-    - mvn clean test
+    - mvn test -Dbrowser=$BROWSER -Dgrid=true -DgridUrl=$SELENIUM_URL
   artifacts:
+    when: always
     paths:
       - target/allure-results
+    expire_in: 7 days
 
+# 🔹 Chrome Job
+chrome-test:
+  <<: *parallel_test
+  variables:
+    BROWSER: "chrome"
+
+# 🔹 Firefox Job
+firefox-test:
+  <<: *parallel_test
+  variables:
+    BROWSER: "firefox"
+
+# 🔹 Allure Report Stage
 allure-report:
   stage: report
-  image: frankescobar/allure-docker-service
+  image: maven:3.9.6-eclipse-temurin-17
   script:
-    - allure generate target/allure-results --clean -o target/allure-report
+    - mvn io.qameta.allure:allure-maven:report
   artifacts:
     paths:
-      - target/allure-report
+      - target/site/allure-maven-plugin
+    expire_in: 7 days

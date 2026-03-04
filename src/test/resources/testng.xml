@@ -2,7 +2,15 @@
 
 <suite name="SauceDemoSuite">
 
-    <test name="LoginTests">
+    <test name="ChromeTest">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="tests.LoginTest"/>
+        </classes>
+    </test>
+
+    <test name="FirefoxTest">
+        <parameter name="browser" value="firefox"/>
         <classes>
             <class name="tests.LoginTest"/>
         </classes>

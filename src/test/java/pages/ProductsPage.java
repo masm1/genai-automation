@@ -9,31 +9,43 @@ public class ProductsPage {
 
     WebDriver driver = DriverFactory.getDriver();
 
-    // Locators
     private By productTitle = By.className("title");
-    private By addToCartBackpack = By.id("add-to-cart-sauce-labs-backpack");
+    private By backpackAddBtn = By.id("add-to-cart-sauce-labs-backpack");
+    private By backpackRemoveBtn = By.id("remove-sauce-labs-backpack");
     private By cartIcon = By.className("shopping_cart_link");
-    private By menuButton = By.id("react-burger-menu-btn");
-    private By logoutLink = By.id("logout_sidebar_link");
+    private By sortDropdown = By.className("product_sort_container");
+    private By firstProductPrice = By.className("inventory_item_price");
+    private By removeBackpackBtn = By.id("remove-sauce-labs-backpack");
 
-    // Validate Products Page Loaded
     public boolean isProductsPageDisplayed() {
         return WaitUtils.waitForElementVisible(productTitle).isDisplayed();
     }
 
-    // Add Backpack to Cart
     public void addBackpackToCart() {
-        WaitUtils.waitForElementClickable(addToCartBackpack).click();
+        WaitUtils.waitForElementClickable(backpackAddBtn).click();
     }
 
-    // Click Cart Icon
+    public boolean isBackpackRemoveButtonDisplayed() {
+        return WaitUtils.waitForElementVisible(backpackRemoveBtn).isDisplayed();
+    }
+
+    public void removeBackpackFromCart() {
+        WaitUtils.waitForElementClickable(backpackRemoveBtn).click();
+    }
+
     public void clickCart() {
         WaitUtils.waitForElementClickable(cartIcon).click();
     }
 
-    // Logout
-    public void logout() {
-        WaitUtils.waitForElementClickable(menuButton).click();
-        WaitUtils.waitForElementClickable(logoutLink).click();
+    public void sortByValue(String value) {
+        driver.findElement(sortDropdown).sendKeys(value);
+    }
+
+    public String getFirstProductPrice() {
+        return WaitUtils.waitForElementVisible(firstProductPrice).getText();
+    }
+
+    public boolean isBackpackRemoveButtonPresent() {
+        return driver.findElements(removeBackpackBtn).size() > 0;
     }
 }

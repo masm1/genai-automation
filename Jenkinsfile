@@ -11,6 +11,19 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Run Tests in Parallel') {
+                    parallel {
+                        stage('Chrome Tests') {
+                            steps {
+                                sh 'mvn test -Dbrowser=chrome'
+                            }
+                        }
+                        stage('Firefox Tests') {
+                            steps {
+                                sh 'mvn test -Dbrowser=firefox'
+                            }
+                        }
+                    }
 
         stage('Build & Test') {
             steps {
